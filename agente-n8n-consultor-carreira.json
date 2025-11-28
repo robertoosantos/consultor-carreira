@@ -1,0 +1,247 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        0,
+        272
+      ],
+      "id": "87e94e57-36a6-418e-a57b-ccc2bf3e5d4d",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "LUYOgldMFdC7mhs6",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [
+        288,
+        272
+      ],
+      "id": "111071e6-bac0-481f-8c8f-0d2a4bdae8a4",
+      "name": "MongoDB Chat Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "gXJB8PpXOBJzLeBp",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        224
+      ],
+      "id": "68dc9285-2720-4569-bc5e-aa7f57111ca2",
+      "name": "DeepSeek Chat Model1",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "LUYOgldMFdC7mhs6",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -176
+      ],
+      "id": "adc69d76-6cfe-4907-9201-86f759eb9d80",
+      "name": "DeepSeek Chat Model2",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "LUYOgldMFdC7mhs6",
+          "name": "DeepSeek account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Você recebeu uma mensagem que viola a política de uso desse sistema. Informe ao usuário que esse comportamento não será tolerado."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        240,
+        -352
+      ],
+      "id": "407f6707-e741-412d-a56b-3c710c2515ed",
+      "name": "Agente Disciplinar"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Você é um consultor de carreira especializado em construir planos de carreira pessoal.\n\nVocê adotará uma postura de entrevistador, realizando apenas uma pergunta por vez ao usuário para adquirir informações importantes para construir um plano de carreira.\n\nO plano de carreira deve conter:\n\n```\n1. Objetivo para o próximo passo\n2. Auto-avaliação em relação ao momento atual de carreira\n3. Pontos fortes que o usuário identifica em si.\n4. Pontos fracos que o usuário identifica em si.\n5. Pontos fortes que as pessoas veem no usuário.\n6. Pontos fracos que as pessoas veem no usuário.\n7. Lista de Soft e Hard skills que o usuário deve priorizar para alcançar o objetivo.\n8. Lista diversa de fontes de conhecimento e pessoas que o usuário irá se conectar para alcançar o objetivo.\n9 Lista de planos de ação para alcançar o objetivo.\n```\n\nTodas essas informações devem ser respondidas pelo usuário. "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        176,
+        16
+      ],
+      "id": "e881dd6b-aad6-44b3-8c56-26614ffb1676",
+      "name": "Consultor de Carreira"
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.chatInput }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Racismo",
+              "description": "Identifique o uso de expressões racistas ou ofensivas"
+            },
+            {
+              "category": "Preconceito",
+              "description": "Identifique o uso de expressões preconceituosas ou ofensivas"
+            }
+          ]
+        },
+        "options": {
+          "fallback": "other"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -80
+      ],
+      "id": "1f2af33b-ef94-4307-b4fd-4fdfd5f0df40",
+      "name": "Classificador de Preconceitos"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Olá! 👋\n\nMeu nome é Bob e eu serei seu consultor de carreira.\n\nPara começarmos a construir um plano de carreira, me diga:\n\nQual seu próximo objetivo de carreira?",
+        "options": {
+          "subtitle": "Plano de Carreira Pessoal",
+          "title": "Olá! 👋"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -512,
+        0
+      ],
+      "id": "aa516954-f70d-4c30-8019-707aeb332c8b",
+      "name": "Interface de Usuário",
+      "webhookId": "096601ba-fce4-4951-b7d0-0c41a1a9ef9d"
+    }
+  ],
+  "connections": {
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Consultor de Carreira",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Consultor de Carreira",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Classificador de Preconceitos",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente Disciplinar",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultor de Carreira": {
+      "main": [
+        []
+      ]
+    },
+    "Classificador de Preconceitos": {
+      "main": [
+        [
+          {
+            "node": "Agente Disciplinar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Agente Disciplinar",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Consultor de Carreira",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interface de Usuário": {
+      "main": [
+        [
+          {
+            "node": "Classificador de Preconceitos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "57754610a9a8413ced76fa9a2ab8ccea217de451c741692a77374d77f0a3a1e7"
+  }
+}
